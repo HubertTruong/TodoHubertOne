@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hubert.todo.R
 import com.hubert.todo.form.FormActivity
@@ -82,11 +84,19 @@ class TaskListFragment : Fragment() {
         super.onResume()
         viewModel.refresh()
         val tmp = requireView().findViewById<TextView>(R.id.textView)
-        //val imageView = view?.findViewById<ImageView>(R.id.imageView)
+        val avatarImageView = view?.findViewById<ImageView>(R.id.imageView)
         lifecycleScope.launch {
-            val userInfo = Api.userWebService.getInfo().body()!!
-            tmp.text = "Bonjour " + userInfo.firstName + " " + userInfo.lastName
             //viewModel.refresh()
+            val userInfo = Api.userWebService.getInfo().body()!!
+            //val userInfos = binding.textView
+            tmp.text = "Bonjour " + userInfo.firstName + " " + userInfo.lastName
+            //userInfos.text = "${userInfo.firstName} ${userInfo.lastName}"
         }
+
+        avatarImageView?.load("https://goo.gl/gEgYUd"){
+            crossfade(true)
+            transformations(CircleCropTransformation())
+        }
+
     }
 }
